@@ -1,0 +1,6 @@
+---
+user: deploy
+home: "/home/{{user}}"
+nrf: "{{home}}/nrf"
+downloads: "{{home}}/downloads"
+

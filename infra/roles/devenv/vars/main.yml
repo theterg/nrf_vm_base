@@ -1,0 +1,12 @@
+---
+user: deploy
+home: "/home/{{user}}"
+nrf: "{{home}}/nrf"
+downloads: "{{home}}/downloads"
+
+toolchain_version: 20150921
+toolchain_base: gcc-arm-none-eabi-4_9-2015q3
+toolchain_full: "{{toolchain_base}}-{{toolchain_version}}-{{platform}}.tar.bz2"
+platform: linux
+avrtoolchain_archive: "avr8-gnu-toolchain-3.5.4.1709-linux.any.x86_64.tar.gz"
+avrtoolchain_name: "avr8-gnu-toolchain-linux_x86_64"

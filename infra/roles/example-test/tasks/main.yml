@@ -1,0 +1,10 @@
+---
+  - name: Clean Blinky
+    command: "make clean"
+    args:
+      chdir: /home/{{user}}/src/fw_base/sdk14.2/examples/peripheral/blinky/pca10040/s132/armgcc/
+
+  - name: Make Blinky
+    command: "make all"
+    args:
+      chdir: /home/{{user}}/src/fw_base/sdk14.2/examples/peripheral/blinky/pca10040/s132/armgcc/

@@ -1,0 +1,12 @@
+---
+user: deploy
+home: "/home/{{user}}"
+nrf: "{{home}}/nrf"
+downloads: "{{home}}/downloads"
+
+platform: linux
+avrdude_patch: "avrdude.patch"
+avrdude_conf: "avrdude.conf"
+avr_udev: "60-avr.rules"
+
+jlink_deb: jlink_5.12.2_x86_64.deb

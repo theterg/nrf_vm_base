@@ -1,0 +1,12 @@
+---
+  - name: Install packages needed for Vim Janus
+    apt: pkg={{item}} state=installed
+    with_items:
+      - ack-grep
+      - ctags
+      - ruby
+      - rake
+
+  - name: Install Janus for Vim
+    command: /bin/bash -c "curl -L https://bit.ly/janus-bootstrap | bash"
+

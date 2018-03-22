@@ -1,0 +1,13 @@
+---
+  - name: Synchronize local source
+    synchronize:
+      src: ../../../../
+      dest: /home/deploy/src
+      rsync_path: "sudo rsync"
+      set_remote_user: False
+      rsync_opts:
+          - "--chmod=F666"
+    become: no
+
+  - name: Set ownership of source
+    file: path=/home/deploy/src owner={{user}} group={{user}} recurse=yes state=directory

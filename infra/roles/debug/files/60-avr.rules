@@ -1,0 +1,15 @@
+ACTION!="add", SUBSYSTEM!="usb_device", GOTO="avr_rules_end"
+
+# Atmel Corp.JTAG ICE mkII
+ATTR{idVendor}=="03eb", ATTR{idProduct}=="2103", MODE="666", GROUP="dialout"
+
+# Atmel Corp. AVRISP mkII
+ATTR{idVendor}=="03eb", ATTR{idProduct}=="2104", MODE="666", GROUP="dialout"
+
+# Atmel Corp. Dragon
+ATTR{idVendor}=="03eb", ATTR{idProduct}=="2107", MODE="666", GROUP="dialout"
+
+# USBasp
+ATTR{idProduct}=="05dc", ATTR{idVendor}=="16c0", MODE="666", GROUP="dialout"
+
+LABEL="avr_rules_end"

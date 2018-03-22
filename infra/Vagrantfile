@@ -1,0 +1,67 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+# system "vagrant plugin update"
+# required_plugins = %w(vagrant-digitalocean)
+# required_plugins.each do |plugin|
+#   system "NOKOGIRI_USE_SYSTEM_LIBRARIES=1 vagrant plugin install #{plugin}" unless Vagrant.has_plugin? plugin
+# end
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "ubuntu/trusty64"
+
+  config.vm.synced_folder "../", "/src/",
+    mount_options: ["dmode=777,fmode=666"]
+
+  config.vm.define "nrfdev" do |nrfdev|
+    nrfdev.vm.hostname = "nrfdev"
+
+    nrfdev.vm.provision "ansible" do |ansible|
+      ansible.playbook = "playbook.yml"
+      ansible.inventory_path = "inventory.ini"
+      ansible.host_key_checking = false
+      ansible.sudo = true
+      ansible.raw_ssh_args = ['-o ForwardAgent=yes']
+    end
+
+    nrfdev.vm.provider "virtualbox" do |provider, override|
+      provider.name = "nrfdev"
+      override.vm.box = "ubuntu/trusty64"
+      override.vm.network "private_network", ip: "33.33.33.55" # VirtualBox version
+      provider.customize ["modifyvm", :id, "--memory", "1024"]
+
+      provider.customize ['modifyvm', :id, '--usb', 'on']
+      provider.customize ["modifyvm", :id, "--usb", "on"]
+      provider.customize ["modifyvm", :id, "--usbehci", "on"]
+      provider.customize ["usbfilter", "add", "0",
+        "--target", :id,
+        "--name", "J-Link",
+        "--vendorid", "0x1366"]
+      provider.customize ["usbfilter", "add", "0",
+        "--target", :id,
+        "--name", "STlink",
+        "--vendorid", "0x0483"]
+      provider.customize ["usbfilter", "add", "0",
+        "--target", :id,
+        "--name", "AVRisp",
+        "--vendorid", "0x03eb"]
+      provider.customize ["usbfilter", "add", "0",
+        "--target", :id,
+        "--name", "USBasp",
+        "--vendorid", "0x05dc"]
+      #provider.customize ["controlvm", :id, "usbattach",
+      #  "p=0x1015;v=0x1366;s=0x000068b16d280353;l=0x14100000"]
+
+      # provider.customize ['usbfilter', 'add', '0', '--target', :id, '--name', 'edimax7718un', '--vendorid', '0x7392']
+    end
+
+    nrfdev.vm.provider "parallels" do |provider, override|
+      override.vm.box = "parallels/ubuntu-14.04"
+      provider.name = "nrfdev"
+    end
+
+  end
+end

@@ -1,0 +1,38 @@
+---
+  - name: Install needed packages for the development environment
+    apt: pkg={{item}} state=installed
+    with_items:
+      - lib32z1
+      - lib32ncurses5
+      - minicom
+      - screen
+      - openocd
+      - libtool
+      - pkg-config
+      - autoconf
+      - automake
+      - texinfo
+      - vim
+
+  - name: Create directories
+    file: path={{item}} state=directory
+    with_items:
+      - "{{downloads}}"
+      - "{{home}}/.bash"
+
+  - name: Try to copy user's SSH key to VM (optional)
+    copy: src=~/.ssh/id_rsa.pub dest=/home/{{user}}/.ssh/authorized_keys mode=0700 owner={{user}} group={{user}}
+    ignore_errors: True
+
+  - name: Set ownership of our files
+    file: path={{item}} owner={{user}} group={{user}} recurse=yes state=directory
+    with_items:
+      - "{{downloads}}"
+      - "{{home}}/.bash"
+
+  - name: Copy JLink Tools
+    copy: src={{jlink_deb}} dest={{downloads}}/{{jlink_deb}}
+
+  - name: Install JLink Tools
+    apt: deb={{downloads}}/{{jlink_deb}}
+

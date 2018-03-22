@@ -1,0 +1,23 @@
+general:
+  branches:
+    only:
+      - master
+
+machine:
+  python:
+    version: 2.7.10
+
+dependencies:
+  pre:
+    - sudo apt-get update
+    - sudo apt-get install -y build-essential libssl-dev libffi-dev python-dev
+    - pip install --upgrade -r requirements.txt
+    - ansible-playbook -i "localhost," -c local infra/tests.yml
+
+test:
+  override:
+    - make:
+        pwd:
+          fw_base/sdk14.2/examples/peripheral/blinky/pca10040/s132/armgcc
+  post:
+    - cp fw_base/sdk14.2/examples/peripheral/blinky/pca10040/s132/armgcc/_build/* $CIRCLE_ARTIFACTS/
